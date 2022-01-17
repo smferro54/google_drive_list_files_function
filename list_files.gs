@@ -4,20 +4,20 @@ var user_properties = PropertiesService.getUserProperties()
 var cont_token = user_properties.getProperty('CONTINUATION_TOKEN')
 console.log(user_properties.getProperty('CONTINUATION_TOKEN'))
 
-function isTimeUp(t){
-  var now = new Date();
-  return now.getTime() - t.getTime() > 29*60*1000; //1 minutes * 10 seconds * 1000 miliseconds
-}
-
 function listFolderContents() {
   var t = new Date()
+
+  function isTimeUp(t){
+    var now = new Date();
+    return now.getTime() - t.getTime() > 29*60*1000; //1 minutes * 10 seconds * 1000 miliseconds
+  }
 
   if (cont_token==null){
     //first time execution
     let ss = SpreadsheetApp.getActiveSpreadsheet()
-    let parent_folder = DriveApp.getFileById(ss.getId()).getParents().next().getName()
-    var folders = DriveApp.getFoldersByName(parent_folder)
-    var folder = folders.next();
+    let parent_folder = DriveApp.getFileById(ss.getId()).getParents().next().getId()
+    console.log(parent_folder)
+    var folder = DriveApp.getFolderById(parent_folder)
     var contents = folder.getFiles();
 
     var sheet = ss.getActiveSheet();
